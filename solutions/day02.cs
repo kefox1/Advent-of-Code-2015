@@ -1,4 +1,6 @@
 using System;
+using System.Data;
+using System.Reflection.Metadata.Ecma335;
 
 namespace adventofcode2015.day02
 {
@@ -10,12 +12,17 @@ namespace adventofcode2015.day02
             int w;
             int h;
 
-            int[] sides = new int[3];
+            int[] faces = new int[3];
+            int[] edges = new int[3];
 
             int presentSqft;
             int presentSlack;
+            int longestEdge;
+            int ribbonWrap;
+            int ribbonBow;
 
             int totalPaper = 0;
+            int totalRibbon = 0;
             
             foreach (string line in File.ReadLines("inputs/day02.txt"))
             {
@@ -24,25 +31,30 @@ namespace adventofcode2015.day02
                 w = Int32.Parse(dimensions[1]);
                 h = Int32.Parse(dimensions[2]);
 
-                sides[0] = l*w;
-                sides[1] = w*h;
-                sides[2] = h*l;
+                edges[0] = l;
+                edges[1] = w;
+                edges[2] = h;
+                Array.Sort(edges);
+
+                faces[0] = l*w;
+                faces[1] = w*h;
+                faces[2] = h*l;
+                Array.Sort(faces);
 
                 presentSqft = 0;
-                presentSlack = sides[0];
-
-                foreach (int side in sides)
+                foreach (int face in faces)
                 {
-                    presentSqft += 2 * side;
-                    if (side < presentSlack)
-                    {
-                        presentSlack = side;
-                    }
+                    presentSqft += 2 * face;
                 }
-
+                presentSlack = faces[0];
                 totalPaper += presentSqft + presentSlack;
+
+                ribbonWrap = edges[0] * 2 + edges[1] * 2;
+                ribbonBow = l * w * h;
+                totalRibbon += ribbonWrap + ribbonBow;
             }
             Console.WriteLine("Total Wrapping Paper Needed: " + totalPaper + "sqft");
+            Console.WriteLine("Total Ribbon Needed: " + totalRibbon + "ft");
         }
     }
 }
