@@ -10,6 +10,8 @@ namespace adventofcode2015.day01
         static void Main(string[] args)
         {
             int floor = 0;
+            int position = 1;
+            int firstBasementFloor = 0;
 
             foreach (string line in File.ReadLines("inputs/day01.txt"))
             {
@@ -23,9 +25,19 @@ namespace adventofcode2015.day01
                     {
                         floor--;
                     }
+
+                    if (firstBasementFloor == 0)
+                    {
+                        if (floor == -1)
+                        {
+                           firstBasementFloor = position; 
+                        }
+                        position++;
+                    }
                 }
             }
             Console.WriteLine("Final Floor: "+floor);
+            Console.WriteLine("First Basement Floor: "+firstBasementFloor);
         }
     }
 }
