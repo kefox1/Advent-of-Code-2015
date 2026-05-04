@@ -1,6 +1,4 @@
 using System;
-using System.Data;
-using System.Reflection.Metadata.Ecma335;
 
 namespace adventofcode2015.day02
 {
