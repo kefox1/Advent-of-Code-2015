@@ -7,41 +7,62 @@ namespace adventofcode2015.day03
     {
         static void Main(string[] args)
         {
-            int[] currentCoordinates = new int[2];
-            Dictionary<string,int> coordinatePresents = new Dictionary<string, int>();
+            int[] soloSantaCoordinates = new int[2];
+            int[] duoSantaCoordinates = new int[2];
+            int[] duoBotCoordinates = new int[2];
+
+            Dictionary<string,bool> yearOneHousesVisited = new Dictionary<string, bool>();
+            Dictionary<string,bool> yearTwoHousesVisited = new Dictionary<string, bool>();
+
+            yearOneHousesVisited[string.Join(",",soloSantaCoordinates)] = true;
+            yearTwoHousesVisited[string.Join(",",duoSantaCoordinates)] = true;
+
+            int houseNumber = 0;
 
             foreach (string line in File.ReadLines("inputs/day03.txt"))
             {
                 foreach (char direction in line)
                 {
-                    if (direction == '^')
-                    {
-                        currentCoordinates[1] ++;
-                    }
-                    else if (direction == 'v')
-                    {
-                        currentCoordinates[1] --;
-                    }
-                    else if (direction == '>')
-                    {
-                        currentCoordinates[0] ++;
-                    }
-                    else if (direction == '<')
-                    {
-                        currentCoordinates[0] --;
-                    }
+                    soloSantaCoordinates = FindCoordinates(direction,soloSantaCoordinates);
+                    yearOneHousesVisited[string.Join(",",soloSantaCoordinates)] = true;
 
-                    if (coordinatePresents.ContainsKey(string.Join(",",currentCoordinates)))
+                    houseNumber++;
+
+                    if (houseNumber % 2 == 0)
                     {
-                        coordinatePresents[string.Join(",",currentCoordinates)]++;
+                        duoSantaCoordinates = FindCoordinates(direction,duoSantaCoordinates);
+                        yearTwoHousesVisited[string.Join(",",duoSantaCoordinates)] = true;
                     }
                     else
                     {
-                        coordinatePresents[string.Join(",",currentCoordinates)] = 1;
-                    }
+                        duoBotCoordinates = FindCoordinates(direction,duoBotCoordinates);
+                        yearTwoHousesVisited[string.Join(",",duoBotCoordinates)] = true;
+                    } 
                 }
             }
-            Console.WriteLine("Houses Visited: " + coordinatePresents.Count);
+            Console.WriteLine("Year One Houses Visited: " + yearOneHousesVisited.Count);
+            Console.WriteLine("Year Two Houses Visited: " + yearTwoHousesVisited.Count);
+        }
+
+        static int[] FindCoordinates(char direction, int[] coordinates)
+        {
+            if (direction == '^')
+            {
+                coordinates[1] ++;
+            }
+            else if (direction == 'v')
+            {
+                coordinates[1] --;
+            }
+            else if (direction == '>')
+            {
+                coordinates[0] ++;
+            }
+            else if (direction == '<')
+            {
+                coordinates[0] --;
+            }
+            return coordinates;
         }
     }
 }
